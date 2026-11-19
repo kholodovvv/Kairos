@@ -76,16 +76,19 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
                 //emit startTimerTimeDelayReceiv(1);
                 //_timer->start(1); //Запуск счетчика времени
 
-            _socket->write(ntp_package, ntp_package.length());
+            if(_socket->write(ntp_package, ntp_package.length()) == ntp_package.length())
+                return QPair(true, QString::fromLocal8Bit("Запрос успешно отправлен!"));
+            else
+                return QPair(false, QString::fromLocal8Bit("Неудачная попытка отправки запроса серверу!"));
             //_ntpPackage.originTimestamp = _dt->GetCurrentTimeUTC().first; //Фиксируем время отправки сообщения серверу
             //_ntpPackage.originClientTimestamp = _ntpPackage.originTimestamp;
 
-            if (_socket->waitForReadyRead(_answerWait))
-                return QPair(true, QString::fromLocal8Bit("Запрос успешно отправлен!")); //<-- Исправить!!!
+            //if (_socket->waitForReadyRead(_answerWait))
+            //    return QPair(true, QString::fromLocal8Bit("Запрос успешно отправлен!")); //<-- Исправить!!!
 
         }
 
-        return QPair(false, QString::fromLocal8Bit("Превышено время ожидания ответа!"));
+        return QPair(false, QString::fromLocal8Bit("Невозможно отправить запрос серверу. Соединение разорвано!"));
     }
 
     void Network::onDisconnected()
@@ -96,13 +99,13 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         }
     }
 
-    void Network::onTimeDelayReceiv(const int &timeDelay)
-    {
-        _ntpPackage.offsetTimestamp = timeDelay / 1000;
-        
-        if(_timerThread->isRunning())
-            _timerThread->quit();
-    }
+    //void Network::onTimeDelayReceiv(const int &timeDelay)
+    //{
+    //    _ntpPackage.offsetTimestamp = timeDelay / 1000;
+    //    
+    //    if(_timerThread->isRunning())
+    //        _timerThread->quit();
+    //}
 
  //   void Network::onnTimerAlarm()
  //   {

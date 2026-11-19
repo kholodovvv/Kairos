@@ -121,7 +121,7 @@ signals:
 private slots:
     void onReadData();
     void onDisconnected();
-    void onTimeDelayReceiv(const int& timeDelay);
+    //void onTimeDelayReceiv(const int& timeDelay);
 
 //public slots:
 //    void onnTimerAlarm();
