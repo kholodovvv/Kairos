@@ -72,8 +72,8 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         ntp_package = _ntpPackage.PackageToByte();
 
         if (_socket && _socket->isOpen() && _isConnected) {
-            if (_timer != nullptr)
-                emit startTimerTimeDelayReceiv(1);
+            //if (_timer != nullptr)
+                //emit startTimerTimeDelayReceiv(1);
                 //_timer->start(1); //Запуск счетчика времени
 
             _socket->write(ntp_package, ntp_package.length());
@@ -119,8 +119,8 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
             }
 
             if (buf.length() == 48) {
-                if (_timer != nullptr)
-                    emit stopTimerTimeDelayReceiv();
+                //if (_timer != nullptr)
+                    //emit stopTimerTimeDelayReceiv();
                     //_timer->stop(); //Фиксируем время получения пакета, оставливаем счетчик
                 ParseAndCheckReceiveNtpPackage(buf);
             }
@@ -161,24 +161,24 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         if (_dt == nullptr)
             _dt = std::make_shared<DTime>(new DTime());
 
-        if (_timer == nullptr) {
-            _timer = std::make_shared<TimerTimeDelayReseption>(new TimerTimeDelayReseption());
-            _timer->Init();
+        //if (_timer == nullptr) {
+        //    _timer = std::make_shared<TimerTimeDelayReseption>(new TimerTimeDelayReseption());
+        //    _timer->Init();
             //_timer->setTimerType(Qt::PreciseTimer);
             //connect(_timer.get(), &QTimer::timeout, this, &Network::onnTimerAlarm);
-        }
+        //}
 
-        if (_timerThread == nullptr) {
-            _timerThread = std::make_unique<QThread>();
-            _timer->moveToThread(_timerThread.get());
+        //if (_timerThread == nullptr) {
+        //    _timerThread = std::make_unique<QThread>();
+        //    _timer->moveToThread(_timerThread.get());
 
-            //connect(_timer.get(), &TimerTimeDelayReseption::sTimeDelayReseption, this, &Network::onTimeDelayReceiv, Qt::AutoConnection);
-            connect(this, &Network::startTimerTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onStart, Qt::AutoConnection);
-            connect(this, &Network::stopTimerTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onStop, Qt::AutoConnection);
-            //connect(this, &Network::getTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onGetTime, Qt::AutoConnection);
+        //    //connect(_timer.get(), &TimerTimeDelayReseption::sTimeDelayReseption, this, &Network::onTimeDelayReceiv, Qt::AutoConnection);
+        //    connect(this, &Network::startTimerTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onStart, Qt::AutoConnection);
+        //    connect(this, &Network::stopTimerTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onStop, Qt::AutoConnection);
+        //    //connect(this, &Network::getTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onGetTime, Qt::AutoConnection);
 
-            _timerThread->start();
-        }
+        //    _timerThread->start();
+        //}
     }
 
     void Network::ParseAndCheckReceiveNtpPackage(const QByteArray& bArray)
@@ -199,14 +199,14 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
 
         //qint64 offsetTransmit = _ntpPackage.receiveTimestamp - _ntpPackage.originTimestamp; //Задержка канала при отправке
         //qint64 offsetReceive = _ntpPackage.transmitTimestamp - _ntpPackage.receiveClientTimestamp; //Задержка канала при получении
-        _ntpPackage.receiveClientTimeCounter = _timer->GetTime();
+        //_ntpPackage.receiveClientTimeCounter = _timer->GetTime();
         _timerThread->quit();
         _timerThread->deleteLater();
         //emit getTimeDelayReceiv();
         //_timerThread->wait(5000);
 
-        if(_ntpPackage.receiveClientTimeCounter != 0)
-            _ntpPackage.offsetTimestamp = _ntpPackage.transmitTimestamp - ((_ntpPackage.receiveClientTimeCounter / 2) / 1000);
+        //if(_ntpPackage.receiveClientTimeCounter != 0)
+        //    _ntpPackage.offsetTimestamp = _ntpPackage.transmitTimestamp - ((_ntpPackage.receiveClientTimeCounter / 2) / 1000);
 
         if (_ntpPackage.leapIndicator == 3)
             _ntpPackage.note = QString::fromLocal8Bit("Не следует доверять данным данного сервера!");
@@ -310,7 +310,7 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         return QPair<qint64, qint64>(sec, msec);
     }
 
-    quint32 ntp_package::ConvertByteToUInt32(QByteArray& bArray) {
+    quint32 ntp_package::ConvertByteToUInt32(QByteArray bArray) {
         quint32 value = 0;
 
         for (int i = 0; i < 4; i++) {
@@ -329,52 +329,52 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         return QString::fromLocal8Bit("%1:%2:%3").arg(hour).arg(min).arg(sec);
     }
 
-    void TimerTimeDelayReseption::Init()
-    {
-        /*if (_timer == nullptr)
-            _timer = std::make_shared<QTimer>();
+    //void TimerTimeDelayReseption::Init()
+    //{
+    //    /*if (_timer == nullptr)
+    //        _timer = std::make_shared<QTimer>();
 
-        connect(_timer.get(), &QTimer::timeout, this, &TimerTimeDelayReseption::onCounterTime);*/
-    }
+    //    connect(_timer.get(), &QTimer::timeout, this, &TimerTimeDelayReseption::onCounterTime);*/
+    //}
 
-    void TimerTimeDelayReseption::timerEvent(QTimerEvent *event)
-    {
-        _time += _delay;
-    }
+    //void TimerTimeDelayReseption::timerEvent(QTimerEvent *event)
+    //{
+    //    _time += _delay;
+    //}
 
-    void TimerTimeDelayReseption::onStart(const int &delay)
-    {
-        _delay = delay;
-        _idTimer = this->startTimer(_delay);
-        /*if (_timer != nullptr) {
-            _delay = delay;
-            _timer->start(_delay);
-        }*/
-    }
+    //void TimerTimeDelayReseption::onStart(const int &delay)
+    //{
+    //    _delay = delay;
+    //    _idTimer = this->startTimer(_delay);
+    //    /*if (_timer != nullptr) {
+    //        _delay = delay;
+    //        _timer->start(_delay);
+    //    }*/
+    //}
 
-    void TimerTimeDelayReseption::onStop()
-    {
-        this->killTimer(_idTimer);
-        /*if (_timer != nullptr)
-            _timer->stop();*/
-    }
+    //void TimerTimeDelayReseption::onStop()
+    //{
+    //    this->killTimer(_idTimer);
+    //    /*if (_timer != nullptr)
+    //        _timer->stop();*/
+    //}
 
-    void TimerTimeDelayReseption::onReset()
-    {
-        _time = 0;
-    }
+    //void TimerTimeDelayReseption::onReset()
+    //{
+    //    _time = 0;
+    //}
 
-    void TimerTimeDelayReseption::onGetTime()
-    {
-        emit sTimeDelayReseption(_time);
-    }
+    //void TimerTimeDelayReseption::onGetTime()
+    //{
+    //    emit sTimeDelayReseption(_time);
+    //}
 
-    int TimerTimeDelayReseption::GetTime()
-    {
-        return _time;
-    }
+    //int TimerTimeDelayReseption::GetTime()
+    //{
+    //    return _time;
+    //}
 
-    void TimerTimeDelayReseption::onCounterTime() 
-    {
-        //_time += _delay;
-    }
+    //void TimerTimeDelayReseption::onCounterTime() 
+    //{
+    //    //_time += _delay;
+    //}
