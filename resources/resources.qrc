@@ -1,0 +1,11 @@
+<RCC>
+<qresource prefix="/">
+		<file>images/favicon.png</file>
+        <file>images/exit_72.png</file>
+	    <file>images/about_72.png</file>
+		<file>images/set_72.png</file>
+        <file>images/clear_64.png</file>
+		<file>images/play_64.png</file>
+		<file>images/stop_64.png</file>
+</qresource>
+</RCC>
