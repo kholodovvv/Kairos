@@ -12,7 +12,7 @@
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 {
-	setWindowTitle(":: SNTP client ::");
+	setWindowTitle(":: Kairos SNTP client ::");
 	setWindowIcon(QPixmap(":/images/favicon.png"));
 	setFixedSize(800, 600);
 
