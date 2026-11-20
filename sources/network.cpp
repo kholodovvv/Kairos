@@ -203,8 +203,8 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         //qint64 offsetTransmit = _ntpPackage.receiveTimestamp - _ntpPackage.originTimestamp; //Задержка канала при отправке
         //qint64 offsetReceive = _ntpPackage.transmitTimestamp - _ntpPackage.receiveClientTimestamp; //Задержка канала при получении
         //_ntpPackage.receiveClientTimeCounter = _timer->GetTime();
-        _timerThread->quit();
-        _timerThread->deleteLater();
+        //_timerThread->quit();
+        //_timerThread->deleteLater();
         //emit getTimeDelayReceiv();
         //_timerThread->wait(5000);
 
