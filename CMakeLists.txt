@@ -18,6 +18,7 @@ if (WIN32)
 endif()
 
 find_package(Qt5 COMPONENTS Core Network Gui Widgets REQUIRED)
+find_package(Boost COMPONENTS asio REQUIRED)
 
 set(RESOURCES
     resources/resources.qrc
@@ -43,4 +44,5 @@ target_link_libraries(${PROJECT_NAME}
  Qt5::Network
  Qt5::Gui
  Qt5::Widgets
+ Boost::asio
 )

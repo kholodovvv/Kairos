@@ -223,7 +223,7 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         if (_ntpPackage.refTimestamp == 0)
             _ntpPackage.note += QString::fromLocal8Bit("Сервер не передал своё текущее время!");
 
-        emit answerForServer(QString::fromLocal8Bit("Содержание полученного NTP пакета:\r\n"
+        emit answerForServer(QString::fromLocal8Bit("\r\n\r\n Содержание полученного NTP пакета:\r\n"
             "Leap indicator = %1; <-- Число, предупреждающее о секунде координации;\r\n"
             "Version number = %2; <-- Номер версии протокола NTP;\r\n"
             "Mode = %3; <-- Режим работы сервера;\r\n"
@@ -330,6 +330,13 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         QString hour = QString::number(int((tSource % 86400L) / 3600)).toLocal8Bit();
 
         return QString::fromLocal8Bit("%1:%2:%3").arg(hour).arg(min).arg(sec);
+    }
+
+    std::string DTime::ConvertUInt64ToTimeUTC(const qint64 &timestamp)
+    {
+        auto tp = std::chrono::sys_time<std::chrono::seconds>(
+            std::chrono::seconds(timestamp));
+        return std::format("{:%d.%m.%Y %H:%M:%S}", tp); // UTC
     }
 
     //void TimerTimeDelayReseption::Init()

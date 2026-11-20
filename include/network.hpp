@@ -5,6 +5,7 @@
 #include <QMap>
 #include <string>
 #include <QThread>
+#include <boost/asio.hpp>
 
 class QUdpSocket;
 class QByteArray;
@@ -24,6 +25,7 @@ public:
     int GetTimeOffsetFromUTC();
     QPair<qint64, qint64> GetCurrentTimeUTC();
     QString ConvertInt64ToTimeUTC(const qint64&);
+    std::string ConvertUInt64ToTimeUTC(const qint64&);
 };
 
 //class TimerTimeDelayReseption: public QObject {
