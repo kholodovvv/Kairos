@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 	
 	{
 		QGroupBox* grbConnectionToServer = new QGroupBox(widget);
-		grbConnectionToServer->setTitle(QString::fromLocal8Bit("Ñåòåâîå ïîäêëþ÷åíèå"));
+		grbConnectionToServer->setTitle(QString::fromLocal8Bit("Ð¡ÐµÑ‚ÐµÐ²Ð¾Ðµ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ"));
 		grbConnectionToServer->setAlignment(Qt::AlignHCenter);
 		grbConnectionToServer->setFixedWidth(MainWindow::width() - 10);
 		grbConnectionToServer->setFixedHeight((MainWindow::height() / 10) + (MainWindow::height() / 10));
@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 		QHBoxLayout *startButtonLayot = new QHBoxLayout();
 		
 		_lbNameServer = new QLabel(widget);
-		_lbNameServer->setText(QString::fromLocal8Bit("Èìÿ ñåðâåðà:ïîðò"));
+		_lbNameServer->setText(QString::fromLocal8Bit("Ð˜Ð¼Ñ ÑÐµÑ€Ð²ÐµÑ€Ð°:Ð¿Ð¾Ñ€Ñ‚"));
 		_lbNameServer->setFont(lbFont);
 		_lbNameServer->setScaledContents(true);
 		_lbNameServer->setFixedHeight((MainWindow::height() / 10) / 1.5);
@@ -93,7 +93,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 
 	{
 		QGroupBox* grbReceivedData = new QGroupBox(widget);
-		grbReceivedData->setTitle(QString::fromLocal8Bit("Ïîëó÷åííûå äàííûå"));
+		grbReceivedData->setTitle(QString::fromLocal8Bit("ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ"));
 		grbReceivedData->setAlignment(Qt::AlignHCenter);
 		grbReceivedData->setFixedWidth(MainWindow::width() - 10);
 		grbReceivedData->setContentsMargins(5, 5, 5, 10);
@@ -129,7 +129,7 @@ void MainWindow::onClearForm()
 void MainWindow::setCurrentTime(const QString &cTime)
 {
 	if (_lbCurrTime)
-		_lbCurrTime->setText(QString::fromLocal8Bit("Âðåìÿ: %1").arg(cTime));
+		_lbCurrTime->setText(QString::fromLocal8Bit("Ð’Ñ€ÐµÐ¼Ñ: %1").arg(cTime));
 }
 
 void MainWindow::onStartConnection()
@@ -147,7 +147,7 @@ void MainWindow::onStartConnection()
 				_btnStartConnectionServer->setIconSize(QSize(24, 24));
 			}
 			else {
-				QMessageBox::critical(this, QString::fromLocal8Bit("Îøèáêà!"), QString::fromLocal8Bit("Íå çàïîëíåíî ïîëå \"Èìÿ ñåðâåðà\"!"));
+				QMessageBox::critical(this, QString::fromLocal8Bit("ÐžÑˆÐ¸Ð±ÐºÐ°!"), QString::fromLocal8Bit("ÐÐµ Ð·Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¾ Ð¿Ð¾Ð»Ðµ \"Ð˜Ð¼Ñ ÑÐµÑ€Ð²ÐµÑ€Ð°\"!"));
 			}
 		}
 	}
@@ -161,7 +161,6 @@ void MainWindow::onStartConnection()
 }
 
 void MainWindow::onNetworkMessage(const QString &message) {
-	//_teReceivedData->append(message + "\n");
 	_teReceivedData->append(message);
 }
 
@@ -175,29 +174,29 @@ void MainWindow::CreateToolBar()
 
 	QAction* actClear = tBar->addAction(QString::fromLocal8Bit("Clear"));
 	actClear->setIcon(QPixmap(":/images/clear_64.png"));
-	actClear->setToolTip(QString::fromLocal8Bit("Îò÷èñòèòü ôîðìó"));
+	actClear->setToolTip(QString::fromLocal8Bit("ÐžÑ‚Ñ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ Ñ„Ð¾Ñ€Ð¼Ñƒ"));
 
 	tBar->addSeparator();
 
 	QAction* actSettings = tBar->addAction(QString::fromLocal8Bit("Settings"));
 	actSettings->setIcon(QPixmap(":/images/set_72.png"));
-	actSettings->setToolTip(QString::fromLocal8Bit("Íàñòðîéêè"));
+	actSettings->setToolTip(QString::fromLocal8Bit("ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸"));
 
 	tBar->addSeparator();
 
 	QAction* actExit = tBar->addAction(QString::fromLocal8Bit("Exit"));
 	actExit->setIcon(QPixmap(":/images/exit_72.png"));
-	actExit->setToolTip(QString::fromLocal8Bit("Âûõîä"));
+	actExit->setToolTip(QString::fromLocal8Bit("Ð’Ñ‹Ñ…Ð¾Ð´"));
 
 	tBar->addSeparator();
 	tBar->addSeparator();
 
 	QAction* actAbout = tBar->addAction(QString::fromLocal8Bit("About"));
 	actAbout->setIcon(QPixmap(":/images/about_72.png"));
-	actAbout->setToolTip(QString::fromLocal8Bit("Î ïðîãðàììå"));
+	actAbout->setToolTip(QString::fromLocal8Bit("Ðž Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ðµ"));
 
 	
-	_lbCurrTime->setText(QString::fromLocal8Bit("Âðåìÿ: %1").arg("00:00:00"));
+	_lbCurrTime->setText(QString::fromLocal8Bit("Ð’Ñ€ÐµÐ¼Ñ: %1").arg("00:00:00"));
 	QWidget* spacer = new QWidget();
 	spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	tBar->addWidget(spacer);

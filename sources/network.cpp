@@ -7,11 +7,6 @@
 
 constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
 
-    /*Network::Network(QWidget* parent) : QWidget(parent)
-    {
-
-    }*/
-
     QPair<bool, QString> Network::Connect(const QString& nameServer, const uint& port)
     {
         if (!_socket)
@@ -22,13 +17,13 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
 
             if (!_socket->waitForConnected(_connectionWait)) {
                 _socket->close();
-                return QPair(false, QString::fromLocal8Bit("Соединение с сервером не установлено!"));
+                return QPair(false, QString::fromLocal8Bit("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ СЃРµСЂРІРµСЂРѕРј РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ!"));
             }
 
         }
 
         _isConnected = true;
-        return QPair(true, QString::fromLocal8Bit("Соединение установлено!"));
+        return QPair(true, QString::fromLocal8Bit("РЎРѕРµРґРёРЅРµРЅРёРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ!"));
     }
 
     void Network::SetConnectionWait(const uint& sec)
@@ -63,7 +58,7 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
     QPair<bool, QString> Network::Disconnect()
     {
         onDisconnected();
-        return QPair(true, QString::fromLocal8Bit("Соединение закрыто!"));
+        return QPair(true, QString::fromLocal8Bit("РЎРѕРµРґРёРЅРµРЅРёРµ Р·Р°РєСЂС‹С‚Рѕ!"));
     }
 
     QPair<bool, QString> Network::SendMessage()
@@ -72,24 +67,15 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         ntp_package = _ntpPackage.PackageToByte();
 
         if (_socket && _socket->isOpen() && _isConnected) {
-            //if (_timer != nullptr)
-                //emit startTimerTimeDelayReceiv(1);
-                //_timer->start(1); //Запуск счетчика времени
-            _time_send = std::chrono::steady_clock::now();
+            _time_send = std::chrono::steady_clock::now(); //Р¤РёРєСЃРёСЂСѓРµРј РІСЂРµРјСЏ РѕС‚РїСЂР°РІРєРё СЃРѕРѕР±С‰РµРЅРёСЏ СЃРµСЂРІРµСЂСѓ
 
             if(_socket->write(ntp_package, ntp_package.length()) == ntp_package.length())
-                return QPair(true, QString::fromLocal8Bit("Запрос успешно отправлен!"));
+                return QPair(true, QString::fromLocal8Bit("Р—Р°РїСЂРѕСЃ СѓСЃРїРµС€РЅРѕ РѕС‚РїСЂР°РІР»РµРЅ!"));
             else
-                return QPair(false, QString::fromLocal8Bit("Неудачная попытка отправки запроса серверу!"));
-            //_ntpPackage.originTimestamp = _dt->GetCurrentTimeUTC().first; //Фиксируем время отправки сообщения серверу
-            //_ntpPackage.originClientTimestamp = _ntpPackage.originTimestamp;
-
-            //if (_socket->waitForReadyRead(_answerWait))
-            //    return QPair(true, QString::fromLocal8Bit("Запрос успешно отправлен!")); //<-- Исправить!!!
-
+                return QPair(false, QString::fromLocal8Bit("РќРµ СѓРґР°С‡РЅР°СЏ РїРѕРїС‹С‚РєР° РѕС‚РїСЂР°РІРєРё Р·Р°РїСЂРѕСЃР°!"));
         }
 
-        return QPair(false, QString::fromLocal8Bit("Невозможно отправить запрос серверу. Соединение разорвано!"));
+        return QPair(false, QString::fromLocal8Bit("РќРµ СѓРґР°С‡РЅР°СЏ РїРѕРїС‹С‚РєР° РѕС‚РїСЂР°РІРєРё Р·Р°РїСЂРѕСЃР°. РЎРѕРµРґРёРЅРµРЅРёРµ Р·Р°РєСЂС‹С‚Рѕ!"));
     }
 
     void Network::onDisconnected()
@@ -100,23 +86,10 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         }
     }
 
-    //void Network::onTimeDelayReceiv(const int &timeDelay)
-    //{
-    //    _ntpPackage.offsetTimestamp = timeDelay / 1000;
-    //    
-    //    if(_timerThread->isRunning())
-    //        _timerThread->quit();
-    //}
-
- //   void Network::onnTimerAlarm()
- //   {
- //       _ntpPackage.receiveClientTimeCounter += 1;
- //   }
-
     void Network::onReadData()
     {
         QByteArray buf;
-        _time_receiv = std::chrono::steady_clock::now();
+        _time_receiv = std::chrono::steady_clock::now(); //Р¤РёРєСЃРёСЂСѓРµРј РІСЂРµРјСЏ РїСЂРёРµРјР° СЃРѕРѕР±С‰РµРЅРёСЏ РєР»РёРµРЅС‚РѕРј
 
         if (_ntpMode == NTP_CLIENT_MODE && _socket != nullptr) {
             while (_socket->bytesAvailable() > 0) {
@@ -124,9 +97,6 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
             }
 
             if (buf.length() == 48) {
-                //if (_timer != nullptr)
-                    //emit stopTimerTimeDelayReceiv();
-                    //_timer->stop(); //Фиксируем время получения пакета, оставливаем счетчик
                 ParseAndCheckReceiveNtpPackage(buf);
             }
         }
@@ -136,8 +106,6 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
             }
 
             if (buf.length() == 48) {
-                //emit stopTimerTimeDelayReceiv();
-                //_timer->stop(); //Фиксируем время получения пакета, оставливаем счетчик
                 ParseAndCheckReceiveNtpPackage(buf);
             }
         }
@@ -165,25 +133,6 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
 
         if (_dt == nullptr)
             _dt = std::make_shared<DTime>(new DTime());
-
-        //if (_timer == nullptr) {
-        //    _timer = std::make_shared<TimerTimeDelayReseption>(new TimerTimeDelayReseption());
-        //    _timer->Init();
-            //_timer->setTimerType(Qt::PreciseTimer);
-            //connect(_timer.get(), &QTimer::timeout, this, &Network::onnTimerAlarm);
-        //}
-
-        //if (_timerThread == nullptr) {
-        //    _timerThread = std::make_unique<QThread>();
-        //    _timer->moveToThread(_timerThread.get());
-
-        //    //connect(_timer.get(), &TimerTimeDelayReseption::sTimeDelayReseption, this, &Network::onTimeDelayReceiv, Qt::AutoConnection);
-        //    connect(this, &Network::startTimerTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onStart, Qt::AutoConnection);
-        //    connect(this, &Network::stopTimerTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onStop, Qt::AutoConnection);
-        //    //connect(this, &Network::getTimeDelayReceiv, _timer.get(), &TimerTimeDelayReseption::onGetTime, Qt::AutoConnection);
-
-        //    _timerThread->start();
-        //}
     }
 
     void Network::ParseAndCheckReceiveNtpPackage(const QByteArray& bArray)
@@ -202,47 +151,37 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         _ntpPackage.receiveTimestamp = _ntpPackage.ConvertByteToUInt32(bArray.mid(32, 8));
         _ntpPackage.transmitTimestamp = _ntpPackage.ConvertByteToUInt32(bArray.mid(40, 8));
 
-        _ntpPackage.offsetTimestamp = std::chrono::duration_cast<std::chrono::microseconds>(_time_receiv - _time_send).count() / 1000; //Задержка канала
-        qint64 offsetReceive = _ntpPackage.offsetTimestamp / 2; //Задержка канала при получении
-        //qint64 offsetTransmit = _ntpPackage.receiveTimestamp - _ntpPackage.originTimestamp; //Задержка канала при отправке
-        //qint64 offsetReceive = _ntpPackage.transmitTimestamp - _ntpPackage.receiveClientTimestamp; //Задержка канала при получении
-        //_ntpPackage.receiveClientTimeCounter = _timer->GetTime();
-        //_timerThread->quit();
-        //_timerThread->deleteLater();
-        //emit getTimeDelayReceiv();
-        //_timerThread->wait(5000);
-
-        //if(_ntpPackage.receiveClientTimeCounter != 0)
-        //    _ntpPackage.offsetTimestamp = _ntpPackage.transmitTimestamp - ((_ntpPackage.receiveClientTimeCounter / 2) / 1000);
+        _ntpPackage.offsetTimestamp = std::chrono::duration_cast<std::chrono::microseconds>(_time_receiv - _time_send).count() / 1000; //Р’СЂРµРјСЏ Р·Р°РґРµСЂР¶РєРё РєР°РЅР°Р»Р°
+        qint64 offsetReceive = _ntpPackage.offsetTimestamp / 2; //Р’СЂРµРјСЏ Р·Р°РґРµСЂР¶РєРё РїСЂРёРµРјР° СЃРѕРѕР±С‰РµРЅРёСЏ
 
         if (_ntpPackage.leapIndicator == 3)
-            _ntpPackage.note = QString::fromLocal8Bit("Не следует доверять данным данного сервера!");
+            _ntpPackage.note = QString::fromLocal8Bit("РќРµ СЃР»РµРґСѓРµС‚ РґРѕРІРµСЂСЏС‚СЊ РґР°РЅРЅС‹Рј РґР°РЅРЅРѕРіРѕ СЃРµСЂРІРµСЂР°!");
 
         if (_ntpPackage.mode != 4 && _ntpPackage.mode != 5)
-            _ntpPackage.note += QString::fromLocal8Bit("Не корректный режим работы сервера!");
+            _ntpPackage.note += QString::fromLocal8Bit("РќРµ РєРѕСЂСЂРµРєС‚РЅС‹Р№ СЂРµР¶РёРј СЂР°Р±РѕС‚С‹ СЃРµСЂРІРµСЂР°!");
 
         if (_ntpPackage.stratum > 15)
-            _ntpPackage.note += QString::fromLocal8Bit("Не следует доверять данным данного сервера! Страта > 15, слишком много посредников.");
+            _ntpPackage.note += QString::fromLocal8Bit("РќРµ СЃР»РµРґСѓРµС‚ РґРѕРІРµСЂСЏС‚СЊ РґР°РЅРЅС‹Рј РґР°РЅРЅРѕРіРѕ СЃРµСЂРІРµСЂР°! РЎС‚СЂР°С‚Р° > 15, СЃР»РёС€РєРѕРј РјРЅРѕРіРѕ РїРѕСЃСЂРµРґРЅРёРєРѕРІ.");
 
         if (_ntpPackage.refTimestamp == 0)
-            _ntpPackage.note += QString::fromLocal8Bit("Сервер не передал своё текущее время!");
+            _ntpPackage.note += QString::fromLocal8Bit("РЎРµСЂРІРµСЂ РЅРµ РїРµСЂРµРґР°Р» СЃРІРѕС‘ С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ!");
 
-        emit answerForServer(QString::fromLocal8Bit("\r\n\r\n Содержание полученного NTP пакета:\r\n"
-            "Leap indicator = %1; <-- Число, предупреждающее о секунде координации;\r\n"
-            "Version number = %2; <-- Номер версии протокола NTP;\r\n"
-            "Mode = %3; <-- Режим работы сервера;\r\n"
-            "Stratum = %4; <-- Кол-во посредников между клиентом и эталонными часами;\r\n"
-            "Poll = %5; <-- Число, задающее интервал в секундах между последовательными обращениями;\r\n"
-            "Precision = %6; <-- Точность локальных системных часов;\r\n"
-            "Root delay = %7; <-- Задержка сервера;\r\n"
-            "Root dispersion = %8; <-- Разброс показаний сервера;\r\n"
-            "RefID = %9; <-- ID часов;\r\n"
-            "Reference = %10; UTC(%11) <-- Время сервера;\r\n"
-            "Originate = %12; UTC(%13) <-- Время, отправки запроса, по версии сервера;\r\n"
-            "Receive = %14; UTC(%15) <-- Время получения запроса сервером;\r\n"
-            "Transmit = %16; UTC(%17) <-- Время отправки ответа сервера клиенту.\r\n\r\n"
-            "Примечание: %18;\r\n"
-            "Задержка канала (мс) = %19").
+        emit answerForServer(QString::fromLocal8Bit("\r\nРЎРѕРґРµСЂР¶Р°РЅРёРµ РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ NTP РїР°РєРµС‚Р°:\r\n"
+            "Leap indicator = %1; <-- Р§РёСЃР»Рѕ, РїСЂРµРґСѓРїСЂРµР¶РґР°СЋС‰РµРµ Рѕ СЃРµРєСѓРЅРґРµ РєРѕРѕСЂРґРёРЅР°С†РёРё;\r\n"
+            "Version number = %2; <-- РќРѕРјРµСЂ РІРµСЂСЃРёРё РїСЂРѕС‚РѕРєРѕР»Р° NTP;\r\n"
+            "Mode = %3; <-- Р РµР¶РёРј СЂР°Р±РѕС‚С‹ СЃРµСЂРІРµСЂР°;\r\n"
+            "Stratum = %4; <-- РљРѕР»-РІРѕ РїРѕСЃСЂРµРґРЅРёРєРѕРІ РјРµР¶РґСѓ РєР»РёРµРЅС‚РѕРј Рё СЌС‚Р°Р»РѕРЅРЅС‹РјРё С‡Р°СЃР°РјРё;\r\n"
+            "Poll = %5; <-- Р§РёСЃР»Рѕ, Р·Р°РґР°СЋС‰РµРµ РёРЅС‚РµСЂРІР°Р» РІ СЃРµРєСѓРЅРґР°С… РјРµР¶РґСѓ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅС‹РјРё РѕР±СЂР°С‰РµРЅРёСЏРјРё;\r\n"
+            "Precision = %6; <-- РўРѕС‡РЅРѕСЃС‚СЊ Р»РѕРєР°Р»СЊРЅС‹С… СЃРёСЃС‚РµРјРЅС‹С… С‡Р°СЃРѕРІ;\r\n"
+            "Root delay = %7; <-- Р—Р°РґРµСЂР¶РєР° СЃРµСЂРІРµСЂР°;\r\n"
+            "Root dispersion = %8; <-- Р Р°Р·Р±СЂРѕСЃ РїРѕРєР°Р·Р°РЅРёР№ СЃРµСЂРІРµСЂР°;\r\n"
+            "RefID = %9; <-- ID С‡Р°СЃРѕРІ;\r\n"
+            "Reference = %10; UTC(%11) <-- Р’СЂРµРјСЏ СЃРµСЂРІРµСЂР°;\r\n"
+            "Originate = %12; UTC(%13) <-- Р’СЂРµРјСЏ, РѕС‚РїСЂР°РІРєРё Р·Р°РїСЂРѕСЃР°, РїРѕ РІРµСЂСЃРёРё СЃРµСЂРІРµСЂР°;\r\n"
+            "Receive = %14; UTC(%15) <-- Р’СЂРµРјСЏ РїРѕР»СѓС‡РµРЅРёСЏ Р·Р°РїСЂРѕСЃР° СЃРµСЂРІРµСЂРѕРј;\r\n"
+            "Transmit = %16; UTC(%17) <-- Р’СЂРµРјСЏ РѕС‚РїСЂР°РІРєРё РѕС‚РІРµС‚Р° СЃРµСЂРІРµСЂР° РєР»РёРµРЅС‚Сѓ.\r\n\r\n"
+            "РџСЂРёРјРµС‡Р°РЅРёРµ: %18;\r\n"
+            "Р—Р°РґРµСЂР¶РєР° РєР°РЅР°Р»Р° (РјСЃ) = %19").
             arg(_ntpPackage.leapIndicator).arg(_ntpPackage.versionNumber).arg(_ntpPackage.mode).arg(_ntpPackage.stratum).
             arg(_ntpPackage.poll).arg(_ntpPackage.precision).arg(_ntpPackage.rootDelay).arg(_ntpPackage.rootDispersion).
             arg(_ntpPackage.referenceID).arg(_ntpPackage.refTimestamp).arg(_dt->ConvertInt64ToTimeUTC(_ntpPackage.refTimestamp)).
@@ -273,7 +212,7 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
 
         QByteArray currTimeUTC = ConvertTimeToByte(timeStamp.first, timeStamp.second); 
 
-        std::memcpy(buff.data() + 40, currTimeUTC.data(), 8); //Можно не заполнять текущее время. Сервер свою очередь, тоже не будет запонять его. (Originate)
+        std::memcpy(buff.data() + 40, currTimeUTC.data(), 8); //РњРѕР¶РЅРѕ РЅРµ Р·Р°РїРѕР»РЅСЏС‚СЊ С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ. РЎРµСЂРІРµСЂ СЃРІРѕСЋ РѕС‡РµСЂРµРґСЊ, С‚РѕР¶Рµ РЅРµ Р±СѓРґРµС‚ Р·Р°РїРѕРЅСЏС‚СЊ РµРіРѕ. (Originate)
 
         return buff;
     }
@@ -281,7 +220,7 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
     QByteArray ntp_package::ConvertTimeToByte(const qint64& sec, const qint64& msec)
     {
         double intpart;
-        qint64 fracSec = modf((double)msec / 1000, &intpart) * 1000; //Выделение дробной части секунд
+        qint64 fracSec = modf((double)msec / 1000, &intpart) * 1000; //Р’С‹РґРµР»РµРЅРёРµ РґСЂРѕР±РЅРѕР№ С‡Р°СЃС‚Рё СЃРµРєСѓРЅРґ
 
         QByteArray buff;
         buff[0] = sec >> 24 & 0xff;
@@ -311,8 +250,8 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
     QPair<qint64, qint64> DTime::GetCurrentTimeUTC()
     {
         QDateTime dt = QDateTime::currentDateTimeUtc();
-        qint64 sec = FROM_JAN1900_TO_JAN1970 + dt.currentSecsSinceEpoch(); //Количество секунд (UTC)
-        qint64 msec = sec * 1000; //Количество миллисекунд (UTC)
+        qint64 sec = FROM_JAN1900_TO_JAN1970 + dt.currentSecsSinceEpoch(); //РљРѕР»РёС‡РµСЃС‚РІРѕ СЃРµРєСѓРЅРґ (UTC)
+        qint64 msec = sec * 1000; //РљРѕР»РёС‡РµСЃС‚РІРѕ РјРёР»Р»РёСЃРµРєСѓРЅРґ (UTC)
 
         return QPair<qint64, qint64>(sec, msec);
     }
@@ -342,53 +281,3 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
             std::chrono::seconds(timestamp));
         return std::format("{:%d.%m.%Y %H:%M:%S}", tp); // UTC
     }
-
-    //void TimerTimeDelayReseption::Init()
-    //{
-    //    /*if (_timer == nullptr)
-    //        _timer = std::make_shared<QTimer>();
-
-    //    connect(_timer.get(), &QTimer::timeout, this, &TimerTimeDelayReseption::onCounterTime);*/
-    //}
-
-    //void TimerTimeDelayReseption::timerEvent(QTimerEvent *event)
-    //{
-    //    _time += _delay;
-    //}
-
-    //void TimerTimeDelayReseption::onStart(const int &delay)
-    //{
-    //    _delay = delay;
-    //    _idTimer = this->startTimer(_delay);
-    //    /*if (_timer != nullptr) {
-    //        _delay = delay;
-    //        _timer->start(_delay);
-    //    }*/
-    //}
-
-    //void TimerTimeDelayReseption::onStop()
-    //{
-    //    this->killTimer(_idTimer);
-    //    /*if (_timer != nullptr)
-    //        _timer->stop();*/
-    //}
-
-    //void TimerTimeDelayReseption::onReset()
-    //{
-    //    _time = 0;
-    //}
-
-    //void TimerTimeDelayReseption::onGetTime()
-    //{
-    //    emit sTimeDelayReseption(_time);
-    //}
-
-    //int TimerTimeDelayReseption::GetTime()
-    //{
-    //    return _time;
-    //}
-
-    //void TimerTimeDelayReseption::onCounterTime() 
-    //{
-    //    //_time += _delay;
-    //}

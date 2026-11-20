@@ -29,38 +29,6 @@ public:
     std::string ConvertUInt64ToTimeUTC(const qint64&);
 };
 
-//class TimerTimeDelayReseption: public QObject {
-//
-//    Q_OBJECT
-//
-//public:
-//    TimerTimeDelayReseption(QObject* parent = nullptr) {};
-//    ~TimerTimeDelayReseption() {};
-//    int GetTime();
-//    void Init();
-//
-//protected:
-//    void timerEvent(QTimerEvent* event) override;
-//
-//public slots:
-//    void onStart(const int& delay);
-//    void onStop();
-//    void onReset();
-//    void onGetTime();
-//
-//private slots:
-//    void onCounterTime();
-//
-//signals:
-//    void sTimeDelayReseption(const int &msec);
-//
-//private:
-//    std::shared_ptr<QTimer> _timer = nullptr;
-//    int _time = 0;
-//    int _delay = 0;
-//    int _idTimer = 0;
-//};
-
 struct ntp_package {
     qint8 leapIndicator = 0; // Индикатор коррекции (0 - Нет предупреждения, 1 - Последняя минута дня содержит 61 секунду, 
                                 // 2 - Последняя минута дня содержит 59 секунд, 3 - Неизвестно (время не синхронизировано))
@@ -84,24 +52,21 @@ struct ntp_package {
     qint64 receiveTimestamp = 0; // Время сервера, когда запрос приходит от клиента.
     qint64 transmitTimestamp = 0; // Время сервера, когда запрос отправляется клиенту.
     qint64 originClientTimestamp = 0; // Время клиента, когда запрос отправляется серверу (заполняется клиентом) !!! Убрать
-    //qint64 receiveClientTimeCounter = 0; //Счетчик мсек клиента, останавливается когда запрос пришёл от сервера
     qint64 offsetTimestamp = 0; //Время задержки запроса
     QString note = QString::fromLocal8Bit("Отсутствует"); //Примечание для пользователя
 
     QByteArray PackageToByte();
     QByteArray ConvertTimeToByte(const qint64&, const qint64&);
-    //QPair<qint64, qint64> GetCurrentTimeUTC();
     quint32 ConvertByteToUInt32(QByteArray);
-    //QString ConvertInt64ToTimeUTC(const qint64&);
     std::shared_ptr<DTime> _dt = nullptr;
 };
 
-class Network : public QObject//QWidget
+class Network : public QObject
 {
     Q_OBJECT
 
 public:
-    /*explicit*/ Network(/*QWidget* parent = nullptr*/QObject* parent = nullptr) {};
+    Network(QObject* parent = nullptr) {};
     QPair<bool, QString> Connect(const QString& nameServer, const uint& port);
     void SetConnectionWait(const uint& sec);
     void SetAnswerWait(const uint& sec);
@@ -116,18 +81,12 @@ private:
     void ParseAndCheckReceiveNtpPackage(const QByteArray&);
 
 signals:
-    void answerForServer(/*const QByteArray&*/const QString&);
-    //void startTimerTimeDelayReceiv(const int &delay);
-    //void stopTimerTimeDelayReceiv();
-    //void getTimeDelayReceiv();
+    void answerForServer(const QString&);
 
 private slots:
     void onReadData();
     void onDisconnected();
-    //void onTimeDelayReceiv(const int& timeDelay);
-
-//public slots:
-//    void onnTimerAlarm();
+    //void onnTimerAlarm();
 
 private:
     std::shared_ptr<QUdpSocket> _socket = nullptr;
@@ -139,7 +98,6 @@ private:
     ntp_package _ntpPackage;
     std::shared_ptr<DTime> _dt = nullptr;
     uint _ntpMode = NTP_CLIENT_MODE;
-    //std::shared_ptr<TimerTimeDelayReseption> _timer = nullptr;
     std::unique_ptr<QThread> _timerThread = nullptr;
     std::chrono::steady_clock::time_point _time_send;
     std::chrono::steady_clock::time_point _time_receiv;
