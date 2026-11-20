@@ -75,6 +75,7 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
             //if (_timer != nullptr)
                 //emit startTimerTimeDelayReceiv(1);
                 //_timer->start(1); //Запуск счетчика времени
+            _time_send = std::chrono::steady_clock::now();
 
             if(_socket->write(ntp_package, ntp_package.length()) == ntp_package.length())
                 return QPair(true, QString::fromLocal8Bit("Запрос успешно отправлен!"));
@@ -115,6 +116,7 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
     void Network::onReadData()
     {
         QByteArray buf;
+        _time_receiv = std::chrono::steady_clock::now();
 
         if (_ntpMode == NTP_CLIENT_MODE && _socket != nullptr) {
             while (_socket->bytesAvailable() > 0) {
@@ -134,7 +136,7 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
             }
 
             if (buf.length() == 48) {
-                emit stopTimerTimeDelayReceiv();
+                //emit stopTimerTimeDelayReceiv();
                 //_timer->stop(); //Фиксируем время получения пакета, оставливаем счетчик
                 ParseAndCheckReceiveNtpPackage(buf);
             }
@@ -200,6 +202,8 @@ constexpr auto FROM_JAN1900_TO_JAN1970 = (2208988800UL);
         _ntpPackage.receiveTimestamp = _ntpPackage.ConvertByteToUInt32(bArray.mid(32, 8));
         _ntpPackage.transmitTimestamp = _ntpPackage.ConvertByteToUInt32(bArray.mid(40, 8));
 
+        _ntpPackage.offsetTimestamp = std::chrono::duration_cast<std::chrono::microseconds>(_time_receiv - _time_send).count() / 1000; //Задержка канала
+        qint64 offsetReceive = _ntpPackage.offsetTimestamp / 2; //Задержка канала при получении
         //qint64 offsetTransmit = _ntpPackage.receiveTimestamp - _ntpPackage.originTimestamp; //Задержка канала при отправке
         //qint64 offsetReceive = _ntpPackage.transmitTimestamp - _ntpPackage.receiveClientTimestamp; //Задержка канала при получении
         //_ntpPackage.receiveClientTimeCounter = _timer->GetTime();

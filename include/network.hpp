@@ -6,6 +6,7 @@
 #include <string>
 #include <QThread>
 #include <boost/asio.hpp>
+#include <chrono>
 
 class QUdpSocket;
 class QByteArray;
@@ -116,9 +117,9 @@ private:
 
 signals:
     void answerForServer(/*const QByteArray&*/const QString&);
-    void startTimerTimeDelayReceiv(const int &delay);
-    void stopTimerTimeDelayReceiv();
-    void getTimeDelayReceiv();
+    //void startTimerTimeDelayReceiv(const int &delay);
+    //void stopTimerTimeDelayReceiv();
+    //void getTimeDelayReceiv();
 
 private slots:
     void onReadData();
@@ -140,4 +141,6 @@ private:
     uint _ntpMode = NTP_CLIENT_MODE;
     //std::shared_ptr<TimerTimeDelayReseption> _timer = nullptr;
     std::unique_ptr<QThread> _timerThread = nullptr;
+    std::chrono::steady_clock::time_point _time_send;
+    std::chrono::steady_clock::time_point _time_receiv;
 };
